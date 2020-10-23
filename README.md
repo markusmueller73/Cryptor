@@ -1,9 +1,6 @@
 # Cryptor
-Simple application for Linux, MacOS and Windows to crypt a text- or rtf-file. The file is en-/decode with the AES 128-bit decryption.
+Simple application for Linux, MacOS and Windows to store your login datas in a xml- or decrypted-file. The en-/decoder is AES 128-bit.
 
 # ToDos
-* get file as argument
-* create better ui
 * test on linux machines
 * test whole software
-
