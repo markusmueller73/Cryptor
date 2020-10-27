@@ -65,7 +65,8 @@ Macro _click_mnu_open()
     
   Else
     
-    If ("." + LCase(GetExtensionPart(fileName))) = #APP_EXT
+    ;If ("." + LCase(GetExtensionPart(fileName))) = #APP_EXT
+    If check_file(fileName) = 2
       
       If xml_load_crypted(fileName, *vector, @cfg, dat())
         
@@ -244,6 +245,13 @@ EndMacro
 Macro _click_mnu_print()
   print_database( dat() )
 EndMacro
+Macro _copy_gadget_to_clipboard( gadget )
+  If GetGadgetText(gadget) <> ""
+    SetClipboardText(GetGadgetText(gadget))
+  Else
+    info("Gadget " + gadget + " has no content, nothing To copy.")
+  EndIf
+EndMacro
 
 ;--------------------------------------------------------------------------------
 
@@ -255,7 +263,7 @@ End RESULT
 ;- main() function
 Procedure.l main( argc.l=0 )
   
-  Protected.b doLoop = #True, errorCode = 0, inputChanged = #False, dataType = #APP_DATA_NONE, disabled = #True
+  Protected.b loadSuccess, doLoop = #True, errorCode = 0, inputChanged = #False, dataType = #APP_DATA_NONE, disabled = #True
   Protected.i wndEvt, evtMenu, evtGadget, evtType, *vector, *key
   Protected.s fileName, lastFileName, inputPwd
   
@@ -276,7 +284,7 @@ Procedure.l main( argc.l=0 )
   ;-- test for program parameters
   If argc > 0
     
-    fileName = ProgramParameter()
+    fileName = ProgramParameter() : Debug check_file(fileName)
     
     If FileSize(fileName) < 0
       
@@ -291,26 +299,40 @@ Procedure.l main( argc.l=0 )
       ;---- program arg was set and file exist
       info("program arg '" + fileName + "' was set.")
       
-      ;---- try to load
-      If xml_load(fileName, @cfg, dat())
+      ;---- check file type
+      dataType = check_file(fileName)
+      If dataType = #APP_DATA_XML
         
-        ;----- loading successful
-        main_window_set_list(dat(), @wnd)
+        If xml_load(fileName, @cfg, dat())
+          loadSuccess = #True
+        Else
+          loadSuccess = #False
+        EndIf
         
-        FirstElement(dat())
-        SetGadgetItemState(wnd\lst, 0, 1)
+      ElseIf dataType = #APP_DATA_ENCODED
         
-        main_window_set_dataset(dat(), @wnd)
-        
-        _set_btns(1, 1, 1, 0)
+        If xml_load_crypted(fileName, *vector, @cfg, dat())
+          loadSuccess = #True
+        Else
+          loadSuccess = #False
+        EndIf
         
       Else
-        
+        loadSuccess = #False
+      EndIf
+      
+      If loadSuccess
+        ;----- loading successful
+        main_window_set_list(dat(), @wnd)
+        FirstElement(dat())
+        SetGadgetItemState(wnd\lst, 0, 1)
+        main_window_set_dataset(dat(), @wnd)
+        _set_btns(1, 1, 1, 0)
+      Else
         ;----- can't load the file
         MessageRequester(#APP_NAME, "The file:" + #NL + fileName + #NL + "can't be opened or you have insufficient rights to open it.", #PB_MessageRequester_Info)
         warn("can't open the file '" + fileName + "'.")
         fileName = #Null$
-        
       EndIf
       
     EndIf
@@ -415,12 +437,21 @@ Procedure.l main( argc.l=0 )
               main_window_switch_pwd_gadgets(@wnd, 1, disabled)
             EndIf
             
-          Case wnd\btn_copy
-            If GetGadgetText(wnd\str_password) <> ""
-              SetClipboardText(GetGadgetText(wnd\str_password))
+          Case wnd\btn_web
+            If GetGadgetText(wnd\str_address) <> ""
+              RunProgram(GetGadgetText(wnd\str_address))
             Else
-              info("No password set, nothing to copy.")
+              info("No web address present.")
             EndIf
+            
+          Case wnd\btn_copy_name
+            _copy_gadget_to_clipboard(wnd\str_username)
+            
+          Case wnd\btn_copy_mail
+            _copy_gadget_to_clipboard(wnd\str_email)
+            
+          Case wnd\btn_copy_pass
+            _copy_gadget_to_clipboard(wnd\str_password)
             
           Case wnd\btn_make
             If GetGadgetText(wnd\str_password) <> ""
@@ -488,9 +519,9 @@ EndProcedure
 ;--------------------------------------------------------------------------------
 
 ; IDE Options = PureBasic 5.72 (Windows - x64)
-; CursorPosition = 432
-; FirstLine = 194
-; Folding = A9
+; CursorPosition = 443
+; FirstLine = 219
+; Folding = A+
 ; EnableXP
 ; UseIcon = icons/cryptor_icon.png
 ; CommandLine = testfile.xml

@@ -159,6 +159,8 @@ DataSection
   IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_show.png"
   ICON_COPY:
   IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_copy.png"
+  ICON_WEB:
+  IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_web.png"
   ICON_MAKEPWD:
   IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_makepwd.png"
   ICON_NEW:
@@ -181,8 +183,8 @@ DataSection
   IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_about.png"
 EndDataSection
 ; IDE Options = PureBasic 5.72 (Windows - x64)
-; CursorPosition = 160
-; FirstLine = 85
+; CursorPosition = 162
+; FirstLine = 89
 ; Folding = 9-
 ; EnableXP
 ; UseMainFile = main.pb
