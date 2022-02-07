@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.73 LTS (Windows - x64)">
+  <section name="config">
+    <options closefiles="1" openmode="0" name="Cryptor"/>
+    <comment>a password database</comment>
+  </section>
+  <section name="data">
+    <explorer view="" pattern="0"/>
+    <log show="1"/>
+    <lastopen date="2022-02-07 18:46" user="Markus Müller" host="DESKTOP-WIN10"/>
+  </section>
+  <section name="files">
+    <file name="conf_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="5d0aec0d3cd6311bf639c5812aa4b1a4"/>
+    </file>
+    <file name="header.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="7d4bbc8e6dd7c09b300ceab7ffb2b3f4"/>
+    </file>
+    <file name="language.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="30afd55db70c63b25afdfcbdc73f2db1"/>
+    </file>
+    <file name="main.pb">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="ceaf287de0fe6b68a5b20878799a6248"/>
+    </file>
+    <file name="main_window.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="977dabf1e01e64fda230c0abbb8c4083"/>
+    </file>
+    <file name="mem_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="c166ee02151f212f94a1333b3fbbe62f"/>
+    </file>
+    <file name="print_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="e4bb8a33c2ee3ae10a777d1283098189"/>
+    </file>
+    <file name="pwd_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="6749d2e62807b2d69409133d286c04c2"/>
+    </file>
+    <file name="xml_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="18a0977768de32c42e9b24a25a3db0f0"/>
+    </file>
+    <file name="about_window.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="d82583139b5cbfb3133cd7ca2199a08a"/>
+    </file>
+    <file name="macos_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
+      <fingerprint md5="f9e5e05e358d032d875cf060baecebb7"/>
+    </file>
+  </section>
+  <section name="targets">
+    <target name="Default Target" enabled="1" default="1">
+      <inputfile value="main.pb"/>
+      <outputfile value="..\release\Cryptor.exe"/>
+      <options xpskin="1" debug="1"/>
+      <purifier enable="1"/>
+      <icon enable="1">..\res\cryptor_icon.ico</icon>
+      <compilecount enable="1" value="0"/>
+      <buildcount enable="1" value="0"/>
+      <execonstant enable="1"/>
+    </target>
+  </section>
+</project>
