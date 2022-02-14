@@ -1,25 +1,36 @@
 # Cryptor
+
 Simple application for Linux, MacOS and Windows to store your login datas in a xml- or decrypted-file. The en-/decoder is AES 256-bit.
+
+Please test this software with fictional accounts and report errors and suggestions of new/better functionality.
+
+Thank you and happy testing.
 
 
 # ToDos
-* create a settings dialog
-* create a nicier print layout
-* create a passwords dialog
-* create a nicier about dialog to store all licenses
+
+* create a settings dialog (to select language)
 * test on linux machines
 * test whole software
 
 
 # Version History
 
-Version 2.2.0
+**Version 2.3.0**
+* created a language procedure that can load languages via a xml file
+* added a create password dialog
+* added an about dialog with (hopely) all licenses
+* created a nicier print layout
+* minor bug fixes in the GUI and the password generator
+
+
+**Version 2.2.0**
 * added the AES 256-bit encryption for the database
 * added SHA2 256-bit encryption for the password(s)
 * fix minor bug in the GUI
 
 
-Version 2.1.0
+**Version 2.1.0**
 * fix many bugs in the GUI
 * create a more flexible passwords creator
 * save/load settings to/from a config file
@@ -28,7 +39,7 @@ Version 2.1.0
 * create a MacOS workaround to start the app from Finder (on doubleclick on passwor ddatabase)
 
 
-Version 2.0.0
+**Version 2.0.0**
 * complete rewrite
 * change database for the passwords to XML format
 * use AES 128-bit encryprion for database
@@ -39,20 +50,20 @@ Version 2.0.0
 * created new icons ;-)
 
 
-Version 1.3.0
+**Version 1.3.0**
 * modify source for a MacOS version
 * add a create password function
 
 
-Version 1.2.0
+**Version 1.2.0**
 * fix bugs in the gui
 
 
-Version 1.1.0
+**Version 1.1.0**
 * added double query for the password
 * use MD5 encryption for passwords
 * added a GUI
 
 
-version 1.0.0
+**version 1.0.0**
 * initial release
