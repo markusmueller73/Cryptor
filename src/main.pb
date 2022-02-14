@@ -161,6 +161,7 @@ Procedure.l main( argc.l=0 )
   
   Protected.i n
   Protected.i wndEvt
+  Protected.i evtWnd
   Protected.i evtMenu
   Protected.i evtGadget
   Protected.i evtType
@@ -174,9 +175,12 @@ Procedure.l main( argc.l=0 )
   Protected.s fileName
   Protected.s lastFileName
   Protected.s inputPwd
+  Protected.s newPwd
   
   Protected.CONFIGURATION cfg
   Protected.MAIN_WINDOW   wnd
+  Protected.ABOUT_WINDOW  wnd_about
+  Protected.CONFIG_WINDOW wnd_pwd
   Protected.APP_SETTINGS  ini
   Protected.DATASET       currentData
   
@@ -190,17 +194,22 @@ Procedure.l main( argc.l=0 )
   
   ;-- load app settings
   load_settings(ini)
+  If ini\version <> #APP_VER
+    ;--- a new version ist used, update the settings
+    save_settings(ini)
+    info("A new version is used, updating configuration.")
+  EndIf
   
   ;-- load language
-  If load_language(ini\language) = 0
-    MessageRequester("Error", "Can't load the the language '" + ini\language + "'." + #NL + "Try to delete the config file and start again", #PB_MessageRequester_Error)
-    ProcedureReturn 1
+  If load_xml_language(ini\language) = 0
+    warn("Can't load the the language '" + ini\language + "', setting default language.")
+    get_default_language()
   EndIf
   
   ;-- open window
   If main_window_open(@wnd, ini\pos_x, ini\pos_y)
     SetActiveWindow(wnd\id)
-    dbg("Main window opened ($" + StrH(wnd\id) + ")")
+    info("Opened main window with handle [0x" + Hex(wnd\id,#PB_Long) + "].")
   Else
     warn("Can't open a window.")
     ProcedureReturn 1
@@ -225,7 +234,25 @@ Procedure.l main( argc.l=0 )
         
       ;--- default window events
       Case #PB_Event_CloseWindow
-        doLoop = #False
+        
+        evtWnd = EventWindow()
+        Select evtWnd
+          Case wnd\id
+            doLoop = #False
+          Case wnd_about\id
+            CloseWindow(wnd_about\id)
+          Case wnd_pwd\id
+            CloseWindow(wnd_pwd\id)
+        EndSelect
+        
+      Case #PB_Event_MoveWindow
+        
+        evtWnd = EventWindow()
+        Select evtWnd
+          Case wnd\id
+            ini\pos_x = WindowX(wnd\id)
+            ini\pos_y = WindowY(wnd\id)
+        EndSelect
         
       ;--- check menu
       Case #PB_Event_Menu 
@@ -515,7 +542,7 @@ Procedure.l main( argc.l=0 )
             
           ;--- menu HELP->ABOUT
           Case wnd\mnu\help_about
-            about_window_open(wnd\id)
+            about_window_open(wnd\id, wnd_about)
             
           Default
             ; uncatched menu event
@@ -770,7 +797,11 @@ Procedure.l main( argc.l=0 )
           Case wnd\btn_web
             
             If GetGadgetText(wnd\str_address) <> ""
-              RunProgram(GetGadgetText(wnd\str_address))
+              If Left(GetGadgetText(wnd\str_address), 4) = "http"
+                RunProgram(GetGadgetText(wnd\str_address))
+              Else
+                RunProgram("http://" + GetGadgetText(wnd\str_address))
+              EndIf
             Else
               info("No web address present.")
             EndIf
@@ -789,16 +820,14 @@ Procedure.l main( argc.l=0 )
             
           ;---- click CREATE PASSWORD button
           Case wnd\btn_make
-            
             If GetGadgetText(wnd\str_password) <> ""
               If MessageRequester(#APP_NAME, LANGUAGE("DIALOG_DATASET_PASSWORD_EXIST"), #PB_MessageRequester_YesNo) = #PB_MessageRequester_Yes
-                SetGadgetText(wnd\str_password, gen_pwd(ini\pw_len, ini\pw_uc, ini\pw_lc, ini\pw_num, ini\pw_special, ini\pw_start))
-                SetGadgetText(wnd\str_password2, GetGadgetText(wnd\str_password))
+                open_conf_window(wnd\id, wnd_pwd, ini)
               EndIf
             Else
-              SetGadgetText(wnd\str_password, gen_pwd(ini\pw_len, ini\pw_uc, ini\pw_lc, ini\pw_num, ini\pw_special, ini\pw_start))
-              SetGadgetText(wnd\str_password2, GetGadgetText(wnd\str_password))
+              open_conf_window(wnd\id, wnd_pwd, ini)
             EndIf
+            open_conf_window(wnd\id, wnd_pwd, ini)
             
           Case wnd\txt_address, wnd\txt_comment, wnd\txt_company, wnd\txt_email, wnd\txt_password, wnd\txt_password2, wnd\txt_username
             ; not used at all
@@ -807,15 +836,7 @@ Procedure.l main( argc.l=0 )
             ; not used here, look at function: main_window_gadget_event_cb()
             
           Case wnd\str_company
-            If editState = #APP_DATASET_EDIT
-              
-;               If evtType = #PB_EventType_Change
-;                 MessageRequester(LANGUAGE("DIALOG_WARNING"), LANGUAGE("DIALOG_DONT_CHANGE_COMPANY"), #PB_MessageRequester_Warning)
-;                 SetGadgetText(wnd\str_company, currentData\Company)
-;                 SetActiveGadget(wnd\str_address)
-;               EndIf
-              
-            EndIf
+            ; not used anymore
             
           Case wnd\str_password
             
@@ -835,6 +856,91 @@ Procedure.l main( argc.l=0 )
               Else
                 SetGadgetColor(wnd\str_password2, #PB_Gadget_BackColor, APP_COLOR_HIGHLIGHT)
               EndIf
+            EndIf
+            
+          ;---- click ABOUT WINDOW -> CLOSE button
+          Case wnd_about\btn_close
+            CloseWindow(wnd_about\id)
+            If IsFont(wnd_about\font_fixed)
+              FreeFont(wnd_about\font_fixed)
+            EndIf
+            If IsImage(wnd_about\icon_image)
+              FreeImage(wnd_about\icon_image)
+            EndIf
+            
+          Case wnd_about\txt_email
+            RunProgram("mailto://markus.mueller.73@hotmail.de?subject="+#APP_NAME+"%20"+#APP_VERSION+"%20("+#APP_OS+")")
+            
+          ;---- click PASSWORD WINDOW -> GENERATE button
+          Case wnd_pwd\btn_gen
+            newPwd = gen_pwd(ini\pw_len, ini\pw_uc, ini\pw_lc, ini\pw_num, ini\pw_special, ini\pw_start, ini\pw_valids, ini\pw_hyphen)
+            wnd_pwd\pwd_image = gen_pwd_image(wnd_pwd\img, newPwd)
+            If IsImage(wnd_pwd\pwd_image)
+              SetGadgetState(wnd_pwd\img, ImageID(wnd_pwd\pwd_image))
+            EndIf
+            
+          ;---- click PASSWORD WINDOW -> USE button
+          Case wnd_pwd\btn_use
+            CloseWindow(wnd_pwd\id)
+            If IsImage(wnd_pwd\pwd_image)
+              FreeImage(wnd_pwd\pwd_image)
+            EndIf
+            SetGadgetText(wnd\str_password, newPwd)
+            SetGadgetText(wnd\str_password2, newPwd) : newPwd = #Null$
+            
+          ;---- click PASSWORD WINDOW -> CLOSE button
+          Case wnd_pwd\btn_close
+            CloseWindow(wnd_pwd\id)
+            If IsImage(wnd_pwd\pwd_image)
+              FreeImage(wnd_pwd\pwd_image)
+            EndIf
+            newPwd = #Null$
+            
+          Case wnd_pwd\spn
+            ini\pw_len = GetGadgetState(wnd_pwd\spn)
+            
+          Case wnd_pwd\chk_upper
+            If GetGadgetState(wnd_pwd\chk_upper)
+              ini\pw_uc = Int(ini\pw_len / 3)
+            Else
+              ini\pw_uc = -1
+            EndIf
+            
+          Case wnd_pwd\chk_lower
+            If GetGadgetState(wnd_pwd\chk_lower)
+              ini\pw_lc = Int(ini\pw_len / 3)
+            Else
+              ini\pw_lc = -1
+            EndIf
+            
+          Case wnd_pwd\chk_num
+            If GetGadgetState(wnd_pwd\chk_num)
+              ini\pw_num = Int(ini\pw_len / 3)
+            Else
+              ini\pw_num = -1
+            EndIf
+            
+          Case wnd_pwd\chk_special
+            If GetGadgetState(wnd_pwd\chk_special)
+              ini\pw_special = Int(ini\pw_len / 3)
+              DisableGadget(wnd_pwd\chk_valids, #False)
+            Else
+              ini\pw_special = -1
+              DisableGadget(wnd_pwd\chk_valids, #True)
+            EndIf
+            
+          Case wnd_pwd\chk_valids
+            If GetGadgetState(wnd_pwd\chk_valids)
+              ini\pw_valids = 1
+            Else
+              ini\pw_valids = 0
+            EndIf
+            
+          Case wnd_pwd\chk_hyphen
+            If GetGadgetState(wnd_pwd\chk_hyphen)
+              ini\pw_hyphen = 1
+            Else
+              ini\pw_hyphen = 0
             EndIf
             
           Default
@@ -907,13 +1013,13 @@ Procedure.l main( argc.l=0 )
 EndProcedure
 ;- end of main()
 ;--------------------------------------------------------------------------------
-; IDE Options = PureBasic 5.73 LTS (Windows - x64)
-; CursorPosition = 798
-; FirstLine = 778
+; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
+; CursorPosition = 205
+; FirstLine = 183
 ; Folding = 0
 ; EnableXP
 ; UseIcon = ../res/cryptor_icon.png
-; Executable = ..\Cryptor.app
+; Executable = ../Cryptor.app
 ; EnablePurifier
 ; EnableCompileCount = 108
 ; EnableBuildCount = 1

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.73 LTS (Windows - x64)">
+<project xmlns="http://www.purebasic.com/namespace" version="1.0" creator="PureBasic 5.71 LTS (MacOS X - x64)">
   <section name="config">
     <options closefiles="1" openmode="0" name="Cryptor"/>
     <comment>a password database</comment>
@@ -8,28 +8,40 @@
   <section name="data">
     <explorer view="" pattern="0"/>
     <log show="1"/>
-    <lastopen date="2022-02-07 18:46" user="Markus Müller" host="DESKTOP-WIN10"/>
+    <lastopen date="2022-02-14 19:16" user="markus" host="markus-macbook-pro.local"/>
   </section>
   <section name="files">
-    <file name="conf_functions.pbi">
+    <file name="about_window.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="5d0aec0d3cd6311bf639c5812aa4b1a4"/>
+      <fingerprint md5="456a2c18774bde8f15fc031ac298453f"/>
+    </file>
+    <file name="conf_functions.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="55fa0b4ca0ba13dcf55445e25a33f0c3"/>
+    </file>
+    <file name="conf_window.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="700ae3416e2f295ccd4d277420031e0e"/>
     </file>
     <file name="header.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="7d4bbc8e6dd7c09b300ceab7ffb2b3f4"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="c54ac499bb1fe2432dc0d3a50c08103e"/>
     </file>
     <file name="language.pbi">
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="ddd9111adf26bb3d6b784f945132e85f"/>
+    </file>
+    <file name="macos_functions.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="30afd55db70c63b25afdfcbdc73f2db1"/>
+      <fingerprint md5="f9e5e05e358d032d875cf060baecebb7"/>
     </file>
     <file name="main.pb">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="ceaf287de0fe6b68a5b20878799a6248"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="f1f93edf73c6d2dcab2ef51136391b7e"/>
     </file>
     <file name="main_window.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="977dabf1e01e64fda230c0abbb8c4083"/>
+      <config load="0" scan="1" panel="1" warn="1" lastopen="1" panelstate="+"/>
+      <fingerprint md5="ad57ce9743ede94b6cba2a87e11203a2"/>
     </file>
     <file name="mem_functions.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
@@ -37,35 +49,31 @@
     </file>
     <file name="print_functions.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="e4bb8a33c2ee3ae10a777d1283098189"/>
+      <fingerprint md5="6c5a24ff26eb1a1ac09162193a83f384"/>
     </file>
     <file name="pwd_functions.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="6749d2e62807b2d69409133d286c04c2"/>
+      <fingerprint md5="997e48a2bd0f1dd8b529862014cce8c5"/>
     </file>
     <file name="xml_functions.pbi">
       <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
       <fingerprint md5="18a0977768de32c42e9b24a25a3db0f0"/>
-    </file>
-    <file name="about_window.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="d82583139b5cbfb3133cd7ca2199a08a"/>
-    </file>
-    <file name="macos_functions.pbi">
-      <config load="0" scan="1" panel="1" warn="1" lastopen="0" panelstate="+"/>
-      <fingerprint md5="f9e5e05e358d032d875cf060baecebb7"/>
     </file>
   </section>
   <section name="targets">
     <target name="Default Target" enabled="1" default="1">
       <inputfile value="main.pb"/>
       <outputfile value="..\release\Cryptor.exe"/>
+      <executable value="../release/Cryptor.app"/>
       <options xpskin="1" debug="1"/>
       <purifier enable="1"/>
-      <icon enable="1">..\res\cryptor_icon.ico</icon>
-      <compilecount enable="1" value="0"/>
-      <buildcount enable="1" value="0"/>
+      <icon enable="1">../res/cryptor_icon.png</icon>
+      <compilecount enable="1" value="43"/>
+      <buildcount enable="1" value="3"/>
       <execonstant enable="1"/>
+      <constants>
+        <constant value="#APP_DEFAULT_VECTOR = &quot;047BAC37170DFB3C63226B5646883BB1&quot;" enable="1"/>
+      </constants>
     </target>
   </section>
 </project>

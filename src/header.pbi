@@ -17,18 +17,21 @@ CompilerSelect #PB_Compiler_OS
     #NL = #LF$
     #APP_OS = "Linux"
     #APP_CONF_EXT = ".conf"
+    #APP_FIXED_FONT = "Terminus"
     Global APP_LOG_DIR$ = GetHomeDirectory() + ".cryptor\"
     Global APP_CONF_DIR$ = APP_LOG_DIR$
   CompilerCase #PB_OS_MacOS
     #NL = #CR$
     #APP_OS = "MacOS"
     #APP_CONF_EXT = ".conf"
+    #APP_FIXED_FONT = "Andale Mono"
     Global APP_LOG_DIR$ = GetHomeDirectory() + ".cryptor/"
     Global APP_CONF_DIR$ = APP_LOG_DIR$
   CompilerCase #PB_OS_Windows
     #NL = #CRLF$
     #APP_OS = "Windows"
     #APP_CONF_EXT = ".ini"
+    #APP_FIXED_FONT = "Consolas"
     Global APP_LOG_DIR$ = GetHomeDirectory() + ".cryptor/"
     Global APP_CONF_DIR$ = APP_LOG_DIR$
   CompilerDefault
@@ -38,27 +41,43 @@ CompilerEndSelect
 ;- application constants
 #APP_NAME  = "Cryptor"
 #APP_MAJOR = 2
-#APP_MINOR = 2
+#APP_MINOR = 3
 #APP_MICRO = 0
+#APP_VER   = 230
 #APP_VERSION = "ver. " + #APP_MAJOR + "." + #APP_MINOR + "." + #APP_MICRO + "." + #PB_Editor_BuildCount
 #APP_EXT   = ".pwdx"
 #APP_EXT_L = $50574458
+#APP_ENCODING  = #PB_UTF8
+
+;- encryption constants
 #APP_AES_SIZE = 256
 #APP_SHA2_SIZE = 256
 #APP_KEY_SIZE = 32
 #APP_KEY_LEN = #APP_KEY_SIZE * 2
 #APP_VEC_SIZE = 16
 #APP_VEC_LEN = #APP_VEC_SIZE * 2
-#APP_ENCODING  = #PB_UTF8
+
+;- language constants
+#APP_LANGUAGE_FILE = "languages.xml"
+#APP_LANGUAGE_MAIN = "Cryptor-Languages"
+#APP_LANGUAGE_LANGUAGES = "Languages"
+#APP_LANGUAGE_LANGUAGE = "Language"
+#APP_LANGUAGE_ENTRY = "Entry"
+#APP_LANGUAGE_PLACEHOLDER = "%s"
+
+;- file requester constants
 #APP_REQUESTER_PATTERN_S = #APP_NAME + " files (*" + #APP_EXT + ")|*" + #APP_EXT
 #APP_REQUESTER_PATTERN_L = #APP_REQUESTER_PATTERN_S + "|eXtended Markup Language files (*.xml)|*.xml;*.XML|All files (*.*)|*.*"
+
+;- window constants
 #APP_WINDOW_WIDTH  = 800
 #APP_WINDOW_HEIGHT = 500
 #APP_BUTTON_WIDTH  = 140
 #APP_BUTTON_HEIGHT = 30
-#APP_COLOR_HIGHLIGHT = $508050
 #APP_COLOR_WARNING   = $8080C0
 #APP_TIMER_ID = 5
+
+;- special MacOS constants
 #APP_EVENT_MACOS_FINDER_FILELIST = #PB_Event_FirstCustomValue
 
 ;- application logging constants
@@ -69,6 +88,18 @@ Enumeration 1
   #APP_LOGTYPE_DEBUG
 EndEnumeration
 
+;- password generator constants
+Enumeration 0
+  #BEGIN_WITH_RANDOM
+  #BEGIN_WITH_UPPER_CASE
+  #BEGIN_WITH_LOWER_CASE
+  #BEGIN_WITH_NUMBER
+  #BEGIN_WITH_SPECIAL_CHAR
+EndEnumeration
+#SPECIAL_CHARS = 29
+#PASSWORD_IMAGE_WIDTH  = 380
+#PASSWORD_IMAGE_HEIGHT = 120
+
 ;- application data constants
 Enumeration 0
   #APP_DATA_NONE
@@ -76,6 +107,7 @@ Enumeration 0
   #APP_DATA_ENCODED
 EndEnumeration
 
+;- datatype name constants
 #APP_DATATYPE_CFG     = "Configuration"
 #APP_DATATYPE_DB      = "Database"
 #APP_DATATYPE_DATA    = "Dataset"
@@ -89,6 +121,7 @@ EndEnumeration
 #APP_DATATYPE_PWD2    = "Password2"
 #APP_DATATYPE_MISC    = "Comment"
 
+;- dataset function constants
 #APP_DATASET_NEW = -1
 #APP_DATASET_NONE = 0
 #APP_DATASET_DEL = 1
@@ -97,6 +130,7 @@ EndEnumeration
 
 ;- application structures
 Structure APP_SETTINGS
+  version.l
   pos_x.l
   pos_y.l
   width.l
@@ -107,6 +141,8 @@ Structure APP_SETTINGS
   pw_lc.l
   pw_num.l
   pw_special.l
+  pw_valids.l
+  pw_hyphen.l
   language.s
   lastFilename.s
 EndStructure
@@ -222,6 +258,7 @@ XIncludeFile "xml_functions.pbi"
 XIncludeFile "print_functions.pbi"
 XIncludeFile "main_window.pbi"
 XIncludeFile "about_window.pbi"
+XIncludeFile "conf_window.pbi"
 
 ;- function declarations
 Declare.l main( argc.l=0 )
@@ -259,9 +296,9 @@ DataSection
   ICON_ABOUT:
   IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_about.png"
 EndDataSection
-; IDE Options = PureBasic 5.73 LTS (Windows - x64)
-; CursorPosition = 259
-; FirstLine = 206
+; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
+; CursorPosition = 65
+; FirstLine = 50
 ; Folding = +-
 ; EnableXP
 ; UseMainFile = main.pb

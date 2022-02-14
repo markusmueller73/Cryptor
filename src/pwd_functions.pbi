@@ -3,15 +3,7 @@
 ;  * pwd_functions.pbi
 ;  *
 
-#SPECIAL_CHARS = 29
 
-Enumeration 0
-  #BEGIN_WITH_RANDOM
-  #BEGIN_WITH_UPPER_CASE
-  #BEGIN_WITH_LOWER_CASE
-  #BEGIN_WITH_NUMBER
-  #BEGIN_WITH_SPECIAL_CHAR
-EndEnumeration
 ;--------------------------------------------------------------------------------
 Procedure.i get_pwd( *key , ask_twice.b = #False )
   
@@ -79,6 +71,11 @@ Procedure.s gen_pwd( Length.l , UpperCase.l = 0 , LowerCase.l = 0 , Numbers.l = 
     ProcedureReturn #Null$
   ElseIf Length > 128
     warn("Password length was too big (>128).")
+    ProcedureReturn #Null$
+  EndIf
+  
+  If UpperCase = -1 And LowerCase = -1 And Numbers = -1 And SpecialSigns = -1
+    warn("All chartypes were negative, can't create password.")
     ProcedureReturn #Null$
   EndIf
   
@@ -207,6 +204,7 @@ Procedure.s gen_pwd( Length.l , UpperCase.l = 0 , LowerCase.l = 0 , Numbers.l = 
   ;-- free the array for the special signs
   FreeArray(sc())
   
+  info("Password with length of "+Str(Len(new_pwd$))+" signs successful created.")
   ProcedureReturn new_pwd$
   
 EndProcedure
@@ -216,8 +214,9 @@ DataSection
   SPECIAL_CHARS:
   Data.s "!","§","$","%","&","/","(",")","=","?","\","[","]","{","}",",",".",";",":","-","_","<",">","|","+","*","#","'","~"
 EndDataSection
-; IDE Options = PureBasic 5.73 LTS (Windows - x64)
-; CursorPosition = 73
+; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
+; CursorPosition = 81
+; FirstLine = 64
 ; Folding = -
 ; EnableXP
 ; EnablePurifier

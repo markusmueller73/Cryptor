@@ -23,8 +23,8 @@ Procedure.i  print_database( List d.DATASET() )
     
     If PrintRequester()
       
-      pages = print_drawingmode(d())
-      ;pages = print_vectormode(d())
+      ;pages = print_drawingmode(d())
+      pages = print_vectormode(d())
       
     Else
       info("No printer installed or user cancelled the requester.")
@@ -47,8 +47,8 @@ Procedure.i print_drawingmode(List d.DATASET())
   
   Protected.i h_font, h_fontb, y, i = 1
   
-  h_font  = LoadFont(#PB_Any, "Courier New", 48, #PB_Font_HighQuality)
-  h_fontb = LoadFont(#PB_Any, "Courier New", 48, #PB_Font_HighQuality|#PB_Font_Bold)
+  h_font  = LoadFont(#PB_Any, #APP_FIXED_FONT, 48, #PB_Font_HighQuality)
+  h_fontb = LoadFont(#PB_Any, #APP_FIXED_FONT, 48, #PB_Font_HighQuality|#PB_Font_Bold)
   
   If StartPrinting(#APP_NAME + " - Database")
     
@@ -108,9 +108,70 @@ EndProcedure
 
 Procedure.i print_vectormode( List d.DATASET() )
   
+  Protected.l x, y, tbvh, page
+  Protected.i h_font, h_fontb
+  Protected.s text_block
+  
+  h_font  = LoadFont(#PB_Any, #APP_FIXED_FONT, 48, #PB_Font_HighQuality)
+  h_fontb = LoadFont(#PB_Any, #APP_FIXED_FONT, 48, #PB_Font_HighQuality|#PB_Font_Bold)
+  
   If StartPrinting(#APP_NAME + " - Database")
     
-    If StartVectorDrawing(PrinterVectorOutput())
+    If StartVectorDrawing(PrinterVectorOutput(#PB_Unit_Point))
+      
+      VectorFont(FontID(h_fontb), 12)
+      VectorSourceColor(RGBA(0, 0, 0, 225))
+      
+      x = 40
+      y = 40
+      MovePathCursor(x, y)
+      DrawVectorText(#APP_NAME + " password database")
+      
+      y + 15
+      MovePathCursor(x, y)
+      DrawVectorText(set_string("=", Len(#APP_NAME + " password database")))
+      
+      y + 45
+      
+      ForEach d()
+        
+        text_block = #NL + d()\Company + #NL + set_string("-", Len(d()\Company)) + #NL
+        If d()\Address
+          text_block + "(Web-)Address:  " + d()\Address + #NL
+        EndIf
+        If d()\Username
+          text_block + "Username:       " + d()\Username + #NL
+        EndIf
+        If d()\Email
+          text_block + "E-Mail address: " + d()\Email + #NL
+        EndIf
+        If d()\Password
+          text_block + "Password:       " + d()\Password + #NL
+        EndIf
+        If d()\Comment
+          text_block + #NL + "Comments:" + #NL + #NL + d()\Comment + #NL
+        EndIf
+        text_block + #NL + set_string("-", 70) + #NL
+        
+        
+        tbvh = VectorParagraphHeight(text_block, VectorOutputWidth()-80, VectorOutputHeight())
+        If y + tbvh > VectorOutputHeight()
+          y = 40
+          page + 1
+          MovePathCursor(VectorOutputWidth()-60, VectorOutputHeight()-55)
+          DrawVectorText("-" + Str(page) + "-")
+          NewPrinterPage()
+        EndIf
+        
+        MovePathCursor(x, y)
+        DrawVectorParagraph(text_block, VectorOutputWidth()-80, tbvh)
+        y + tbvh
+        dbg("Printer page height: " + Str(PrinterPageHeight()) + "(" + Str(VectorOutputHeight()) + ")" + ", current position: " + Str(y) + ", current text block: " + Str(tbvh))
+        
+      Next
+      
+      MovePathCursor(VectorOutputWidth()-60, VectorOutputHeight()-55)
+      DrawVectorText("-" + Str(page+1) + "-")
       
       StopVectorDrawing()
       
@@ -125,10 +186,9 @@ Procedure.i print_vectormode( List d.DATASET() )
   
 EndProcedure
 
-
-; IDE Options = PureBasic 5.72 (Windows - x64)
-; CursorPosition = 103
-; FirstLine = 87
+; IDE Options = PureBasic 5.73 LTS (Windows - x64)
+; CursorPosition = 153
+; FirstLine = 126
 ; Folding = +
 ; EnableXP
 ; EnablePurifier
