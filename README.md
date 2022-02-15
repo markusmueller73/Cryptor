@@ -2,7 +2,7 @@
 
 Simple application for Linux, MacOS and Windows to store your login datas in a xml- or decrypted-file. The en-/decoder is AES 256-bit.
 
-Please test this software with fictional accounts and report errors and suggestions of new/better functionality.
+Please test this software with fictional accounts and report errors and suggestions of new/better functionality. In the "release" folder is an actual MacOS version (must be unpacked bevore use) and an actual MS-Windows version (download the languages.xml too, to see how to translate the gui in a different language).
 
 Thank you and happy testing.
 
