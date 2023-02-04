@@ -16,6 +16,10 @@ Thank you and happy testing.
 
 # Version History
 
+**Version 2.3.1**
+* made the window and gadgets sizeable
+
+
 **Version 2.3.0**
 * created a language procedure that can load languages via a xml file
 * added a create password dialog
