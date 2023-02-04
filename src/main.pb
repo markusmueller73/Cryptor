@@ -202,12 +202,12 @@ Procedure.l main( argc.l=0 )
   
   ;-- load language
   If load_xml_language(ini\language) = 0
-    warn("Can't load the the language '" + ini\language + "', setting default language.")
+    warn("Can't load the language '" + ini\language + "', setting default language.")
     get_default_language()
   EndIf
   
   ;-- open window
-  If main_window_open(@wnd, ini\pos_x, ini\pos_y)
+  If main_window_open(@wnd, ini\pos_x, ini\pos_y, ini\width, ini\height)
     SetActiveWindow(wnd\id)
     info("Opened main window with handle [0x" + Hex(wnd\id,#PB_Long) + "].")
   Else
@@ -218,7 +218,7 @@ Procedure.l main( argc.l=0 )
   ;-- test for program parameters
   _load_file_from_parameter(argc)
   
-  ;-- open main window
+  ;-- view main window
   HideWindow(wnd\id, #False)
   
   ;-- start main loop
@@ -254,6 +254,12 @@ Procedure.l main( argc.l=0 )
             ini\pos_y = WindowY(wnd\id)
         EndSelect
         
+      Case #PB_Event_SizeWindow
+          
+          main_window_resize(wnd)
+          ini\width = WindowWidth(wnd\id)
+          ini\height = WindowHeight(wnd\id)
+          
       ;--- check menu
       Case #PB_Event_Menu 
         
@@ -584,7 +590,7 @@ Procedure.l main( argc.l=0 )
               
             EndIf
             
-          Case wnd\cnt, wnd\scr
+          ;Case wnd\cnt, wnd\scr
             ; not used at all
             
           ;---- click DATASET NEW button
@@ -1003,6 +1009,8 @@ Procedure.l main( argc.l=0 )
   ;-- save settings
   ini\pos_x = WindowX(wnd\id)
   ini\pos_y = WindowY(wnd\id)
+  ini\width = WindowWidth(wnd\id)
+  ini\height = WindowHeight(wnd\id)
   save_settings(ini)
   
   ;-- end loop
@@ -1013,15 +1021,17 @@ Procedure.l main( argc.l=0 )
 EndProcedure
 ;- end of main()
 ;--------------------------------------------------------------------------------
-; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
-; CursorPosition = 205
-; FirstLine = 183
+; IDE Options = PureBasic 6.00 LTS (Windows - x64)
+; CursorPosition = 209
+; FirstLine = 185
 ; Folding = 0
+; Optimizer
 ; EnableXP
-; UseIcon = ../res/cryptor_icon.png
-; Executable = ../Cryptor.app
+; DPIAware
+; UseIcon = ..\res\cryptor_icon.ico
+; Executable = ..\release\Cryptor.exe
 ; EnablePurifier
-; EnableCompileCount = 108
-; EnableBuildCount = 1
+; EnableCompileCount = 172
+; EnableBuildCount = 6
 ; EnableExeConstant
 ; Constant = #APP_DEFAULT_VECTOR = "047BAC37170DFB3C63226B5646883BB1"
