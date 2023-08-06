@@ -10,6 +10,8 @@ Structure CONFIG_WINDOW
   frm.i
   txt.i
   spn.i
+  txt_start.i
+  cmb_start.i
   chk_upper.i
   chk_lower.i
   chk_num.i
@@ -110,6 +112,13 @@ Procedure.i open_conf_window( parent_window.i , *w.CONFIG_WINDOW , *p.APP_SETTIN
     
       *w\txt = TextGadget(#PB_Any, 20, 170, 150, 25, LANGUAGE("DIALOG_PWDPREFS_PWD_LEN") + ":")
       *w\spn = SpinGadget(#PB_Any, 20, 195, 150, 25, 0, 128, #PB_Spin_Numeric)
+      
+      *w\txt_start = TextGadget(#PB_Any, 20, 270, 150, 25, LANGUAGE("DIALOG_PWDPREFS_STARTWITH") + ":")
+      *w\cmb_start = ComboBoxGadget(#PB_Any, 20, 295, 150, 25)
+      AddGadgetItem(*w\cmb_start, 0, LANGUAGE("DIALOG_PWDPREFS_UCHAR"))
+      AddGadgetItem(*w\cmb_start, 1, LANGUAGE("DIALOG_PWDPREFS_LCHAR"))
+      AddGadgetItem(*w\cmb_start, 2, LANGUAGE("DIALOG_PWDPREFS_NUMBER"))
+      AddGadgetItem(*w\cmb_start, 3, LANGUAGE("DIALOG_PWDPREFS_SPECIAL"))
     
       *w\chk_upper   = CheckBoxGadget(#PB_Any, 180, 170, 200, 25, LANGUAGE("DIALOG_PWDPREFS_UPPERS") + "?")
       *w\chk_lower   = CheckBoxGadget(#PB_Any, 180, 195, 200, 25, LANGUAGE("DIALOG_PWDPREFS_LOWERS") + "?")
@@ -125,6 +134,7 @@ Procedure.i open_conf_window( parent_window.i , *w.CONFIG_WINDOW , *p.APP_SETTIN
       SetGadgetState(*w\spn, *p\pw_len)
       SetGadgetText(*w\spn, Str(*p\pw_len))
       
+      SetGadgetState(*w\cmb_start, *p\pw_start - 1)
       If *p\pw_uc > 0 : SetGadgetState(*w\chk_upper, #True) : EndIf
       If *p\pw_lc > 0 : SetGadgetState(*w\chk_lower, #True) : EndIf
       If *p\pw_num > 0 : SetGadgetState(*w\chk_num, #True) : EndIf
@@ -151,9 +161,9 @@ Procedure.i open_conf_window( parent_window.i , *w.CONFIG_WINDOW , *p.APP_SETTIN
   ProcedureReturn *w\id
   
 EndProcedure
-; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
-; CursorPosition = 134
-; FirstLine = 122
+; IDE Options = PureBasic 6.00 LTS (Windows - x64)
+; CursorPosition = 136
+; FirstLine = 100
 ; Folding = -
 ; EnableXP
 ; EnablePurifier

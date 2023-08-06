@@ -214,9 +214,9 @@ DataSection
   SPECIAL_CHARS:
   Data.s "!","§","$","%","&","/","(",")","=","?","\","[","]","{","}",",",".",";",":","-","_","<",">","|","+","*","#","'","~"
 EndDataSection
-; IDE Options = PureBasic 5.71 LTS (MacOS X - x64)
-; CursorPosition = 81
-; FirstLine = 64
+; IDE Options = PureBasic 6.00 LTS (Windows - x64)
+; CursorPosition = 181
+; FirstLine = 152
 ; Folding = -
 ; EnableXP
 ; EnablePurifier

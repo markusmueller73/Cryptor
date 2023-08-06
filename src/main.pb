@@ -202,13 +202,13 @@ Procedure.l main( argc.l=0 )
   
   ;-- load language
   If load_xml_language(ini\language) = 0
-    warn("Can't load the language '" + ini\language + "', setting default language.")
+    warn("Can't load the language '" + ini\language + "', setting to default language.")
     get_default_language()
   EndIf
   
   ;-- open window
   If main_window_open(@wnd, ini\pos_x, ini\pos_y, ini\width, ini\height)
-    SetActiveWindow(wnd\id)
+    ;SetActiveWindow(wnd\id)
     info("Opened main window with handle [0x" + Hex(wnd\id,#PB_Long) + "].")
   Else
     warn("Can't open a window.")
@@ -905,6 +905,9 @@ Procedure.l main( argc.l=0 )
           Case wnd_pwd\spn
             ini\pw_len = GetGadgetState(wnd_pwd\spn)
             
+          Case wnd_pwd\cmb_start
+            ini\pw_start = GetGadgetState(wnd_pwd\cmb_start) + 1
+            
           Case wnd_pwd\chk_upper
             If GetGadgetState(wnd_pwd\chk_upper)
               ini\pw_uc = Int(ini\pw_len / 3)
@@ -1022,8 +1025,8 @@ EndProcedure
 ;- end of main()
 ;--------------------------------------------------------------------------------
 ; IDE Options = PureBasic 6.00 LTS (Windows - x64)
-; CursorPosition = 209
-; FirstLine = 185
+; CursorPosition = 908
+; FirstLine = 883
 ; Folding = 0
 ; Optimizer
 ; EnableXP
@@ -1031,7 +1034,7 @@ EndProcedure
 ; UseIcon = ..\res\cryptor_icon.ico
 ; Executable = ..\release\Cryptor.exe
 ; EnablePurifier
-; EnableCompileCount = 172
+; EnableCompileCount = 173
 ; EnableBuildCount = 6
 ; EnableExeConstant
 ; Constant = #APP_DEFAULT_VECTOR = "047BAC37170DFB3C63226B5646883BB1"

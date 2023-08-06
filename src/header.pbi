@@ -42,8 +42,8 @@ CompilerEndSelect
 #APP_NAME  = "Cryptor"
 #APP_MAJOR = 2
 #APP_MINOR = 3
-#APP_MICRO = 1
-#APP_VER   = 231
+#APP_MICRO = 2
+#APP_VER   = 232
 #APP_VERSION = "ver. " + #APP_MAJOR + "." + #APP_MINOR + "." + #APP_MICRO + "." + #PB_Editor_BuildCount
 #APP_EXT   = ".pwdx"
 #APP_EXT_L = $50574458
@@ -297,7 +297,7 @@ DataSection
   IncludeBinary ".." + #PS$ + "res" + #PS$ + "icon_about.png"
 EndDataSection
 ; IDE Options = PureBasic 6.00 LTS (Windows - x64)
-; CursorPosition = 45
+; CursorPosition = 44
 ; FirstLine = 27
 ; Folding = +-
 ; EnableXP

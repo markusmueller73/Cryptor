@@ -201,6 +201,26 @@
     <Language id="en">Contain special chars</Language>
     <Language id="de">Enthält Sonderzeichen</Language>
   </Entry>
+  <Entry id="DIALOG_PWDPREFS_STARTWITH">
+    <Language id="en">Password starts with</Language>
+    <Language id="de">Passwort beginnt mit</Language>
+  </Entry>
+  <Entry id="DIALOG_PWDPREFS_UCHAR">
+    <Language id="en">upper char</Language>
+    <Language id="de">Großbuchstabe</Language>
+  </Entry>
+  <Entry id="DIALOG_PWDPREFS_LCHAR">
+    <Language id="en">lower char</Language>
+    <Language id="de">Kleinbuchstabe</Language>
+  </Entry>
+  <Entry id="DIALOG_PWDPREFS_NUMBER">
+    <Language id="en">number</Language>
+    <Language id="de">Ziffer</Language>
+  </Entry>
+  <Entry id="DIALOG_PWDPREFS_SPECIAL">
+    <Language id="en">special char</Language>
+    <Language id="de">Sonderzeichen</Language>
+  </Entry>
   <Entry id="DIALOG_PASSWORD_TYPE_AGAIN">
     <Language id="en">Type your password again</Language>
     <Language id="de">Passwort Eingabe wiederholen</Language>
