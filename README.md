@@ -16,6 +16,9 @@ Thank you and happy testing.
 
 # Version History
 
+**Version 2.3.2**
+* small bugfix in password generator tool
+
 **Version 2.3.1**
 * made the window and gadgets sizeable
 
