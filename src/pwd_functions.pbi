@@ -3,6 +3,37 @@
 ;  * pwd_functions.pbi
 ;  *
 
+Structure PWD_WINDOW
+    id.i
+    txt.i
+    str.i
+    btn.i
+EndStructure
+
+;--------------------------------------------------------------------------------
+Procedure.l password_requester ( parent_window.i , window_title$ , dialog_text$ , *w.PWD_WINDOW )
+    
+    Protected.l result, text_height = get_text_height_in_px(), text_width = get_text_width_in_px(dialog_text$)
+    
+    If IsWindow(parent_window)
+        *w\id = OpenWindow(#PB_Any, 0, 0, 300, 150, window_title$, #PB_Window_Tool|#PB_Window_WindowCentered, WindowID(parent_window))
+    Else
+        *w\id = OpenWindow(#PB_Any, 0, 0, 300, 150, window_title$, #PB_Window_Tool|#PB_Window_ScreenCentered)
+    EndIf
+    
+    If IsWindow(*w\id)
+        
+        *w\txt = TextGadget(#PB_Any, 10, 10, 280, 50, dialog_text$)
+        *w\str = StringGadget(#PB_Any, 10, 75, 280, 25, "", #PB_String_Password)
+        *w\btn = ButtonGadget(#PB_Any, 75, 110, 150, 30, "Ok")
+        
+        result = 1
+        
+    EndIf
+    
+    ProcedureReturn result
+    
+EndProcedure
 
 ;--------------------------------------------------------------------------------
 Procedure.i get_pwd( *key , ask_twice.b = #False )
@@ -214,10 +245,10 @@ DataSection
   SPECIAL_CHARS:
   Data.s "!","§","$","%","&","/","(",")","=","?","\","[","]","{","}",",",".",";",":","-","_","<",">","|","+","*","#","'","~"
 EndDataSection
-; IDE Options = PureBasic 6.00 LTS (Windows - x64)
-; CursorPosition = 181
-; FirstLine = 152
+; IDE Options = PureBasic 6.02 LTS (Windows - x64)
+; CursorPosition = 27
 ; Folding = -
+; Optimizer
 ; EnableXP
 ; EnablePurifier
 ; EnableCompileCount = 0
